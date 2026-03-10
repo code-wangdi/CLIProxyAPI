@@ -15,6 +15,7 @@ STATS_DIR="temp/stats"
 STATS_FILE="${STATS_DIR}/.usage_backup.json"
 SECRET_FILE="${STATS_DIR}/.api_secret"
 WITH_USAGE=false
+MODELS_SUBMODULE_FILE="internal/registry/models/models.json"
 
 get_port() {
   if [[ -f "config.yaml" ]]; then
@@ -109,6 +110,17 @@ wait_for_service() {
   sleep 2
 }
 
+ensure_models_submodule() {
+  if [[ -f "${MODELS_SUBMODULE_FILE}" ]]; then
+    return
+  fi
+
+  echo "Error: required git submodule file is missing: ${MODELS_SUBMODULE_FILE}"
+  echo "Before building from source, run:"
+  echo "  git submodule update --init --recursive"
+  exit 1
+}
+
 if [[ "${1:-}" == "--with-usage" ]]; then
   WITH_USAGE=true
   export_stats_api_secret
@@ -137,6 +149,7 @@ case "$choice" in
     ;;
   2)
     echo "--- Building from Source and Running ---"
+    ensure_models_submodule
 
     # Get Version Information
     VERSION="$(git describe --tags --always --dirty)"

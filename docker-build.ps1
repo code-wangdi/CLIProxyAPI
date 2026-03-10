@@ -5,6 +5,18 @@
 
 # Stop script execution on any error
 $ErrorActionPreference = "Stop"
+$modelsSubmoduleFile = "internal/registry/models/models.json"
+
+function Ensure-ModelsSubmodule {
+    if (Test-Path $modelsSubmoduleFile) {
+        return
+    }
+
+    Write-Host "Error: required git submodule file is missing: $modelsSubmoduleFile"
+    Write-Host "Before building from source, run:"
+    Write-Host "  git submodule update --init --recursive"
+    exit 1
+}
 
 # --- Step 1: Choose Environment ---
 Write-Host "Please select an option:"
@@ -22,6 +34,7 @@ switch ($choice) {
     }
     "2" {
         Write-Host "--- Building from Source and Running ---"
+        Ensure-ModelsSubmodule
 
         # Get Version Information
         $VERSION = (git describe --tags --always --dirty)

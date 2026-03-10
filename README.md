@@ -60,6 +60,8 @@ Get 10% OFF GLM CODING PLAN：https://z.ai/subscribe?ic=8JVLJQFSKB
 
 CLIProxyAPI Guides: [https://help.router-for.me/](https://help.router-for.me/)
 
+This repository uses the `internal/registry/models` git submodule for the compiled model catalog. Clone with `--recurse-submodules`, or run `git submodule update --init --recursive` before `go build`.
+
 ## Management API
 
 see [MANAGEMENT_API.md](https://help.router-for.me/management/api)
